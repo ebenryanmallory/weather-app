@@ -1,0 +1,14 @@
+{
+    "react": {
+        "awscloudformation": {
+            "AuthRoleName": "weather-app-20190211194857-authRole",
+            "UnauthRoleArn": "arn:aws:iam::161853991765:role/weather-app-20190211194857-unauthRole",
+            "AuthRoleArn": "arn:aws:iam::161853991765:role/weather-app-20190211194857-authRole",
+            "Region": "us-east-1",
+            "DeploymentBucketName": "weather-app-20190211194857-deployment",
+            "UnauthRoleName": "weather-app-20190211194857-unauthRole",
+            "StackName": "weather-app-20190211194857",
+            "StackId": "arn:aws:cloudformation:us-east-1:161853991765:stack/weather-app-20190211194857/be8f7bc0-2e70-11e9-98e0-0e75601403f8"
+        }
+    }
+}
