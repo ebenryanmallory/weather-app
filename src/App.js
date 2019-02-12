@@ -54,7 +54,7 @@ class App extends Component {
       
           <Router>
             <Home path="/" />
-            <Dashboard path="/city" />
+            <City path="/city" />
           </Router>
         </div>
         <h1>React Fetch - Blog</h1>
@@ -67,11 +67,11 @@ class App extends Component {
 
 const Home = () => (
   <div>
-    <h2>Hello</h2>
+    <h2>Home</h2>
   </div>
 );
 
-const Dashboard = () => (
+const City = () => (
   <div>
     <h2>Future search city</h2>
   </div>
