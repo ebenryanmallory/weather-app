@@ -3,6 +3,7 @@
 # AWS
 awsmobilejs
 src/aws-exports.js
+/amplify
 
 # dependencies
 /node_modules
