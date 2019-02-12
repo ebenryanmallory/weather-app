@@ -49,12 +49,12 @@ class App extends Component {
           <div>
           <nav>
             <Link to="/">Home</Link>{" "}
-            <Link to="dashboard">City</Link>
+            <Link to="city">City</Link>
           </nav>
       
           <Router>
             <Home path="/" />
-            <Dashboard path="/dashboard" />
+            <Dashboard path="/city" />
           </Router>
         </div>
         <h1>React Fetch - Blog</h1>
