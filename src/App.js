@@ -1,6 +1,26 @@
 import React, { Component } from 'react';
 import './App.css';
 import { Router, Link } from "@reach/router";
+import Amplify, { API } from 'aws-amplify';
+import awsmobile from './aws-exports';
+
+Amplify.configure(awsmobile);
+
+console.log('hello world!');
+let apiName = 'api20f55b07';
+let path = '/items'; 
+let myInit = { // OPTIONAL
+    headers: {}, // OPTIONAL
+    response: true, // OPTIONAL (return the entire Axios response object instead of only response.data)
+    // queryStringParameters: {  // OPTIONAL
+        // name: 'param'
+    // }
+}
+API.get(apiName, path, myInit).then(response => {
+    console.log('API call successful')
+}).catch(error => {
+    console.log(error.response)
+});
 
 const Post = ({ body }) => {
   return (
