@@ -11,31 +11,7 @@
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
-    <input type="search" id="address" class="form-control" placeholder="Where are we going?" />
-
-    <p>Selected: <strong id="address-value">none</strong></p>
 
     <div id="root"></div>
   </body>
 </html>
-
-<script src="https://cdn.jsdelivr.net/npm/places.js@1.15.5"></script>
-<script>
-(function() {
-  var placesAutocomplete = places({
-    appId: 'plNORUJT35UB',
-    apiKey: '',
-    container: document.querySelector('#address')
-  });
-
-  var $address = document.querySelector('#address-value')
-  placesAutocomplete.on('change', function(e) {
-    $address.textContent = e.suggestion.value
-  });
-
-  placesAutocomplete.on('clear', function() {
-    $address.textContent = 'none';
-  });
-
-})();
-</script>

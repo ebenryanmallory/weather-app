@@ -1,100 +1,102 @@
 import React, { Component } from 'react';
 import './App.css';
-import { Router, Link } from "@reach/router";
 import Amplify, { API } from 'aws-amplify';
 import awsmobile from './aws-exports';
+import AlgoliaPlaces from 'algolia-places-react';
 
 Amplify.configure(awsmobile);
 
-console.log('hello world!');
-let apiName = 'api20f55b07';
-let path = '/items'; 
-let myInit = { // OPTIONAL
-    headers: {}, // OPTIONAL
-    response: true, // OPTIONAL (return the entire Axios response object instead of only response.data)
-    // queryStringParameters: {  // OPTIONAL
-        // name: 'param'
-    // }
+function Template(props) {
+  return <div><h1>{props.json.name}</h1><div>{props.temp} °C</div><div>{props.weather}</div></div>;
 }
-API.get(apiName, path, myInit).then(response => {
-    console.log('API call successful')
-}).catch(error => {
-    console.log(error.response)
-});
-
-const Post = ({ body }) => {
-  return (
-    <div>
-      {body.map(post => {
-        const { _id, title, content } = post;
-        return (
-          <div key={_id}>
-            <h2>{title}</h2>
-            <p>{content}</p>
-            <hr />
-          </div>
-        );
-      })}
-    </div>
-  );
-};
 
 class App extends Component {
-  state = {
-    isLoading: true,
-    posts: [],
-    error: null,
-  };
-  fetchPosts() {
-    fetch(`/fake-data.json`)
-      .then(response => response.json())
-      .then(
-        data =>
-          this.setState({
-            posts: data,
-            isLoading: false,
-          })
-      )
-      .catch(error => this.setState({ error, isLoading: false }));
+  constructor(props) {
+    super(props);
+    this.state = {
+      isLoading: true,
+      json: [],
+      error: null,
+      city: '',
+      temp: [],
+      weather: []
+    };
+    this.handleChange = this.handleChange.bind(this);
+    this.inputCleared = this.inputCleared.bind(this);
   }
+  handleChange(suggestion) {
+    this.setState({city: suggestion.name});
+    this.getWeatherJSON();
+  }
+  inputCleared() {
+    console.log('Input has been cleared');
+    this.setState({isLoading: true,
+                   city: ''});
+  }
+  getWeatherJSON() {
+    let apiName = 'apid9c2b358';
+    let path = '/route/' + this.state.city;
+    let myInit = {
+      headers: {},
+      response: false,
+      queryStringParameters: {
+        // name: 'param'
+      }
+    }
+    API.get(apiName, path, myInit).then(response => {
+        this.setState({                                                        
+          json: response,
+          temp: response.main.temp,
+          weather: response.weather[0].main,
+          isLoading: false,
+        });
+        }).catch(error => {
+          this.setState({ error, isLoading: false })
+        });
+    }
 
   componentDidMount() {
-    this.fetchPosts();
+    // this.getWeatherJSON();
   }
 
   render() {
-    const { isLoading, posts } = this.state;
+    const { isLoading } = this.state;
     return (
       <React.Fragment>
           <div>
-          <nav>
-            <Link to="/">Home</Link>{" "}
-            <Link to="city">City</Link>
-          </nav>
+          <AlgoliaPlaces
+            placeholder='Type in your city:'
+
+            options={{
+              appId: 'plNORUJT35UB',
+              apiKey: '29a7a93f9cc47a568640d78d8d3cd6c7',
+              language: 'en',
+              countries: ['us'],
+              type: 'city',
+            }}
+
+            onChange={({ query, rawAnswer, suggestion, suggestionIndex }) => 
+              this.handleChange(suggestion)}
+
+            onClear={() => 
+              this.inputCleared()}
+
+            onError={({ message }) => 
+              console.log('Fired when we could not make the request to Algolia Places servers for any reason but reaching your rate limit.')}
+          />
       
-          <Router>
-            <Home path="/" />
-            <City path="/city" />
-          </Router>
         </div>
-        <h1>React Fetch - Blog</h1>
         <hr />
-        {!isLoading ? Object.keys(posts).map(key => <Post key={key} body={posts[key]} />) : <h3>Loading...</h3>}
+        <div>
+        {!isLoading ? (
+          <Template json={this.state.json} temp={this.state.temp} weather={this.state.weather} />
+          ) : (
+            <p>Choose location</p>
+          )}
+        </div>
       </React.Fragment>
     );
   }
 }
-
-const Home = () => (
-  <div>
-    <h2>Home</h2>
-  </div>
-);
-
-const City = () => (
-  <div>
-    <h2>Future search city</h2>
-  </div>
-);
 
 export default App;
